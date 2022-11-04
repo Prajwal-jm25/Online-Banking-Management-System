@@ -11,6 +11,7 @@
 #include<sys/ipc.h>
 #include<sys/sem.h>
 #include<ctype.h>
+#include<time.h>
 
 #include "structures.h" //All structures are defined in this header file
 
@@ -613,20 +614,33 @@ void viewDetails(int sd){
 		printf("\t\t\t\t\t\tACCOUNT NUMBER \t\t: %d\n",currUser1.account_no);
 		printf("\t\t\t\t\t\tAVAILABLE BALANCE \t: Rs. %0.2f\n",currUser1.balance);
 		printf("\t\t\t\t\t\tACCOUNT STATUS \t\t: %s\n\n",currUser1.status);
-		char buff[10000];
-		int len=read(sd,buff,10000); //Reading transaction details of the account
-		if(strcmp(buff,"empty")==0)
+		passbook book;
+		int len=read(sd,&book,sizeof(book)); //Reading transaction details of the account
+		if(book.amount==-1)
 		{
-		printf("\n\n\t\t\t*************************** YOUR TRASACTIONS ARE EMPTY!!! *****************************\n\n");
+			printf("\n\n\t\t\t*************************** YOUR TRASACTIONS ARE EMPTY!!! *****************************\n\n");
 		}
 		else
 		{
-		printf("\n\n\t\t\t****************************** TRANSACTION DETIALS ************************************");
-		printf("\n\t\t\t***************************************************************************************");
-		printf("\n%s",buff);
-		printf("\n\t\t\t***************************************************************************************\n\n");
+			printf("\n\n\t\t\t****************************** TRANSACTION DETIALS ************************************");
+			printf("\n\t\t\t***************************************************************************************");
+			int i=1;
+			while(i<=10){
+				if(book.amount==-1){
+					break;
+				}
+				printf("\n\t\t\t\t\tTime : %s",ctime(&book.time));
+				printf("\t\t\t\t\tTransaction Type : %s\t\tAmount : %d\n",book.type,book.amount);
+				//printf("Amount : %d\n",book.amount);
+				printf("\t\t\t\t\tAccount Balance : %d\n\n",book.balance);
+				printf("\t\t\t\t=========================================================================\n");
+				if(i<10){
+					int len=read(sd,&book,sizeof(book));
+				}
+				i++;
+			}
+			printf("\n\t\t\t***************************************************************************************\n\n");
 		}
-		
 	}
 	else if(option==2){
 		jointUser currUser2;
@@ -640,18 +654,32 @@ void viewDetails(int sd){
 		printf("\t\t\t\t\t\tACCOUNT NUMBER \t\t\t: %d\n",currUser2.account_no);
 		printf("\t\t\t\t\t\tAVAILABLE BALANCE \t\t: Rs.%0.2f\n",currUser2.balance);
 		printf("\t\t\t\t\t\tACCOUNT STATUS \t\t\t: %s\n\n",currUser2.status);
-		char buff[10000];
-		int len=read(sd,buff,10000); //Reading transaction details of Joint Account
-		if(strcmp(buff,"empty")==0)
+		passbook book;
+		int len=read(sd,&book,sizeof(book)); //Reading transaction details of the account
+		if(book.amount==-1)
 		{
-		printf("\n\n\t\t\t*************************** YOUR TRASACTIONS ARE EMPTY!!! *****************************\n\n");
+			printf("\n\n\t\t\t*************************** YOUR TRASACTIONS ARE EMPTY!!! *****************************\n\n");
 		}
 		else
 		{
-		printf("\n\n\t\t\t****************************** TRANSACTION DETIALS ************************************");
-		printf("\n\t\t\t***************************************************************************************");
-		printf("\n%s",buff);
-		printf("\n\t\t\t***************************************************************************************\n\n");
+			printf("\n\n\t\t\t****************************** TRANSACTION DETIALS ************************************");
+			printf("\n\t\t\t***************************************************************************************");
+			int i=1;
+			while(i<=10){
+				if(book.amount==-1){
+					break;
+				}
+				printf("\n\t\t\t\t\tTime : %s",ctime(&book.time));
+				printf("\t\t\t\t\tTransaction Type : %s\t\tAmount : %d\n",book.type,book.amount);
+				//printf("Amount : %d\n",book.amount);
+				printf("\t\t\t\t\tAccount Balance : %d\n\n",book.balance);
+				printf("\t\t\t\t=========================================================================\n");
+				if(i<10){
+					int len=read(sd,&book,sizeof(book));
+				}
+				i++;
+			}
+			printf("\n\t\t\t***************************************************************************************\n\n");
 		}
 	}
 	printf("\n\nPress ENTER to go Back to Menu\n");

@@ -14,10 +14,18 @@ void updatepassbook(normalUser currUser,char* s,float amount){
 	sprintf(path,"passbook/NormalUser/%d",currUser.userID); //Accessing the file of user
 	time_t t;
 	time(&t);
-	int len=sprintf(buf,"\n\t\t\t\t%s\t \t\t\t%s \t: %f \t\t Balance : %f\n",ctime(&t),s,amount,currUser.balance); //Writing transaction details to the file
-	int fd=open(path,O_CREAT|O_RDWR,0744);
+	passbook transaction;
+	//strcpy(transaction.type,s);
+	memcpy(transaction.type,s,sizeof(s));
+	//transaction.type="Deposit";
+	transaction.amount=amount;
+	transaction.balance=currUser.balance;
+	transaction.time=t;
+	//printf("%s\n",ctime(&transaction.time));
+	int fd=open(path,O_CREAT|O_APPEND|O_RDWR,0744);
+	//write(fd,&currUser,sizeof(normalUser));
 	lseek(fd,0,SEEK_END);
-	write(fd,buf,len);
+	write(fd,&transaction,sizeof(passbook));
 	close(fd);
 }
 
@@ -27,10 +35,18 @@ void updatepassbookJ(jointUser currUser,char* s,float amount){
 	sprintf(path,"passbook/JointUser/%d",currUser.userID); //Accessing the file of the Joint Account User
 	time_t t;
 	time(&t);
-	int len=sprintf(buf,"\n\t\t\t\t%s\t \t\t\t%s \t: %f \t\t Balance : %f\n",ctime(&t),s,amount,currUser.balance); //Writing transaction details to the file
-	int fd=open(path,O_CREAT|O_RDWR,0744);
+	passbook transaction;
+	//strcpy(transaction.type,s);
+	memcpy(transaction.type,s,sizeof(s));
+	//transaction.type="Deposit";
+	transaction.amount=amount;
+	transaction.balance=currUser.balance;
+	transaction.time=t;
+	//printf("%s\n",ctime(&transaction.time));
+	int fd=open(path,O_CREAT|O_APPEND|O_RDWR,0744);
+	//write(fd,&currUser,sizeof(normalUser));
 	lseek(fd,0,SEEK_END);
-	write(fd,buf,len);
+	write(fd,&transaction,sizeof(passbook));
 	close(fd);
 }
 
@@ -501,6 +517,12 @@ int deleteNormalAcc(int ID){
 	read(fd,&currUser,sizeof(normalUser));
 	if(currUser.account_no<ID){
 		result=0;
+		lock.l_type=F_UNLCK;
+		fcntl(fd,F_SETLK,&lock);
+		fflush(stdout);
+		fflush(stdin);
+		close(fd);
+		return result;
 	}
 	lseek(fd,(i)*sizeof(normalUser),SEEK_SET); //changing the file pointer to the selected record
 	read(fd,&currUser,sizeof(normalUser));

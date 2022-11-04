@@ -26,7 +26,10 @@ typedef struct admin{
 	char password[10];
 }admin;
 
-struct passbook
+typedef struct passbook
 {
-	char data[5000];
-};
+	char type[20];
+	int amount;
+	int balance;
+	time_t time;
+}passbook;

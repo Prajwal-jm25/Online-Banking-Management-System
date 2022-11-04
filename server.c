@@ -70,6 +70,7 @@ void serverTask(int nsd){
 			if(select==1){
 				float amt;
 				read(nsd,&amt,sizeof(float));
+				printf("auisd : %d\n",currUserID);
 				int res=depositMoney(accType,currUserID,amt);
 				write(nsd,&res,sizeof(res));
 			}
@@ -91,12 +92,79 @@ void serverTask(int nsd){
 					char path[100],buf[10000];
 					sprintf(path,"passbook/NormalUser/%d",user1.userID);
 					int fd=open(path,O_CREAT|O_RDONLY,0744);
-					int len=read(fd,buf,10000);
-					if(len==-1||len==0){
-						write(nsd,"Empty",6);	
+					FILE* fp = fopen(path, "r");
+    				// checking if the file exist or not
+    				if (fp == NULL) {
+        				printf("File Not Found!\n");
+    				} 
+    				fseek(fp, 0L, SEEK_END);
+    				// calculating the size of the file
+    				long int res = ftell(fp);
+    				// closing the file
+    				fclose(fp);
+ 				   	res=res/sizeof(passbook);
+					passbook book;
+					if(res==0){
+						book.amount=-1;
+						book.balance=-1;
+						//lseek(fd,0,SEEK_SET);
+						write(nsd,&book,sizeof(book));
+					}
+					else if(res<10){
+						off_t offset=lseek(fd,-1*sizeof(passbook),SEEK_END);
+						while(res>0){
+							if(offset<0){
+								printf("Error Executed\n");
+								book.amount=-1;
+								book.balance=-1;
+								write(nsd,&book,sizeof(book));
+								break;
+							}
+							else if(offset>=0){
+								int len=read(fd,&book,sizeof(book));
+								if(len==-1||len==0){
+									book.amount=-1;
+									write(nsd,&book,sizeof(book));
+									break;
+								}
+								else{
+									write(nsd,&book,sizeof(book));
+								}
+							}
+							res--;
+							if(res>0){
+								offset=lseek(fd,-2*sizeof(passbook),SEEK_CUR);
+							}
+						}
+						book.amount=-1;
+						book.balance=-1;
+						write(nsd,&book,sizeof(book));
 					}
 					else{
-						write(nsd,buf,len);
+						int i=0;
+						off_t offset=lseek(fd,-1*sizeof(passbook),SEEK_END);
+						while(i<10){
+							if(offset>=0){
+								int len=read(fd,&book,sizeof(book));
+								if(len==-1||len==0){
+									book.amount=-1;
+									write(nsd,&book,sizeof(book));
+									break;
+								}
+								else{
+									write(nsd,&book,sizeof(book));
+								}
+							}
+							else{
+								book.amount=-1;
+								write(nsd,&book,sizeof(book));
+								break;
+							}
+							if(i<9){
+								offset=lseek(fd,-2*sizeof(passbook),SEEK_CUR);
+							}
+							i++;
+						}
 					}
 					close(fd);
 				}
@@ -106,12 +174,79 @@ void serverTask(int nsd){
 					char path[100],buf[10000];
 					sprintf(path,"passbook/JointUser/%d",user2.userID);
 					int fd=open(path,O_CREAT|O_RDONLY,0744);
-					int len=read(fd,buf,10000);
-					if(len==-1||len==0){
-						write(nsd,"empty",6);	
+					FILE* fp = fopen(path, "r");
+    				// checking if the file exist or not
+    				if(fp == NULL) {
+        				printf("File Not Found!\n");
+    				} 
+    				fseek(fp, 0L, SEEK_END);
+    				// calculating the size of the file
+    				long int res = ftell(fp);
+    				// closing the file
+    				fclose(fp);
+ 				   	res=res/sizeof(passbook);
+					passbook book;
+					if(res==0){
+						book.amount=-1;
+						book.balance=-1;
+						//lseek(fd,0,SEEK_SET);
+						write(nsd,&book,sizeof(book));
+					}
+					else if(res<10){
+						off_t offset=lseek(fd,-1*sizeof(passbook),SEEK_END);
+						while(res>0){
+							if(offset<0){
+								printf("Error Executed\n");
+								book.amount=-1;
+								book.balance=-1;
+								write(nsd,&book,sizeof(book));
+								break;
+							}
+							else if(offset>=0){
+								int len=read(fd,&book,sizeof(book));
+								if(len==-1||len==0){
+									book.amount=-1;
+									write(nsd,&book,sizeof(book));
+									break;
+								}
+								else{
+									write(nsd,&book,sizeof(book));
+								}
+							}
+							res--;
+							if(res>0){
+								offset=lseek(fd,-2*sizeof(passbook),SEEK_CUR);
+							}
+						}
+						book.amount=-1;
+						book.balance=-1;
+						write(nsd,&book,sizeof(book));
 					}
 					else{
-						write(nsd,buf,len);
+						int i=0;
+						off_t offset=lseek(fd,-1*sizeof(passbook),SEEK_END);
+						while(i<10){
+							if(offset>=0){
+								int len=read(fd,&book,sizeof(book));
+								if(len==-1||len==0){
+									book.amount=-1;
+									write(nsd,&book,sizeof(book));
+									break;
+								}
+								else{
+									write(nsd,&book,sizeof(book));
+								}
+							}
+							else{
+								book.amount=-1;
+								write(nsd,&book,sizeof(book));
+								break;
+							}
+							if(i<9){
+								offset=lseek(fd,-2*sizeof(passbook),SEEK_CUR);
+							}
+							i++;
+						}
 					}
 					close(fd);
 				}

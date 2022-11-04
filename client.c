@@ -30,7 +30,12 @@ int main(){
 		printf("\t\t***********************************************************************************************************\n\n\n");	
 		printf("1. SIGN IN\n2. EXIT\n\nSelect an Option : ");
 		int choice;
-		scanf("%d",&choice);
+		while(scanf("%d", &choice)!=1 || getchar()!='\n'){
+        scanf("%*[^\n]%*c");
+        printf("You must enter an Integer : ");
+    	}
+		printf("\n");
+		//scanf("%d",&choice);
 		switch(choice)
 		{
 			case 1:

@@ -78,7 +78,11 @@ void chooseOption(int sd){
 	printf("3 : ADMIN LOGIN\n");
 	printf("4 : EXIT\n");
 	printf("Select an Option to perform : ");
-	scanf("%d",&option);
+	while(scanf("%d", &option)!=1 || getchar()!='\n'){
+        scanf("%*[^\n]%*c");
+        printf("\nPlease Enter proper(Integer) option : ");
+    }
+	//scanf("%d",&option);
 	switch(option){
 		case 1 :
 			attemptNormalUserLogin(sd);
@@ -99,9 +103,8 @@ void chooseOption(int sd){
 		default :
 			printf("\n\t\t\t\t\t!!!INVALID OPTION!!! Please Select a Valid Option...\n");
 			char c;
-			while((c = getchar()) != '\n' && c != EOF) //Used to clear Keyboard Buffer
-				;
-			sleep(3);
+			while((c = getchar()) != '\n' && c != EOF); //Used to clear Keyboard Buffer
+			sleep(1);
 			chooseOption(sd);
 			break;
 	}
@@ -124,7 +127,11 @@ void showMenu(int sd){
 		printf("5 : PASSWORD CHANGE\n");
 		printf("6 : EXIT\n");
 		printf("Select an option : ");
-		scanf("%d",&select);
+		while(scanf("%d", &select)!=1 || getchar()!='\n'){
+        	scanf("%*[^\n]%*c");
+        	printf("\nPlease Enter proper(Integer) option : ");
+    	}
+		//scanf("%d",&select);
 		switch(select){
 			case 1 :
 				deposit(sd);
@@ -155,9 +162,8 @@ void showMenu(int sd){
 			default :
 				printf("\n\t\t\t\t\t!!!INVALID OPTION!!! Please Select a Valid Option...\n");
 				char c;
-				while((c = getchar()) != '\n' && c != EOF) //To clear Keyboard Buffer
-					;
-				sleep(3);
+				while((c = getchar()) != '\n' && c != EOF); //To clear Keyboard Buffer
+				sleep(1);
 				showMenu(sd);
 				break;
 		}
@@ -174,7 +180,12 @@ void showMenu(int sd){
 		printf("5 : CREATE NEW ADMINISTRATOR ID\n");
 		printf("6 : EXIT\n");
 		printf("Select an option : ");
-		scanf("%d",&select);
+		while(scanf("%d", &select)!=1 || getchar()!='\n'){
+        	scanf("%*[^\n]%*c");
+        	printf("\nPlease Enter proper(Integer) option : ");
+    	}
+		printf("\n");
+		//scanf("%d",&select);
 		switch(select){
 			case 1 :
 				addAccount(sd);
@@ -201,9 +212,8 @@ void showMenu(int sd){
 			default :
 				printf("Invalid option!Select valid option...\n");
 				char c;
-				while((c = getchar()) != '\n' && c != EOF) //To clear Keyboard Buffer
-					;
-				sleep(3);
+				while((c = getchar()) != '\n' && c != EOF); //To clear Keyboard Buffer
+				sleep(1);
 				showMenu(sd);
 				break;
 		}
@@ -217,7 +227,11 @@ void attemptNormalUserLogin(int sd){
 	printf("\e[1;1H\e[2J");
 	printf("\n\t\t\t\t\t\t******* NORMAL-ACCOUNT USER LOGIN *******\n");
 	printf("\nENTER USER ID : ");
-	scanf("%d",&currUser.userID); //We input User Id
+	while(scanf("%d", &currUser.userID)!=1 || getchar()!='\n'){
+        scanf("%*[^\n]%*c");
+        printf("\nEnter an Integer Number : ");
+    }
+	//scanf("%d",&currUser.userID); //We input User Id
 	currUserID=currUser.userID;
   	char *pass=getpass("ENTER PASSWORD : "); //We input Password
   	memcpy(currUser.password,pass,sizeof(pass));
@@ -239,10 +253,9 @@ void attemptNormalUserLogin(int sd){
     }
 	if(!result){
 		printf("\n\t\t******************** LOGIN FAILED!! Enter Proper Credentials/Check if Account is Active ********************\n\n");
-		char c;
-		while((c = getchar()) != '\n' && c != EOF) //To clear Keyboard Buffer
-			;
-		sleep(3);
+		//char c;
+		//while((c = getchar()) != '\n' && c != EOF); //To clear Keyboard Buffer
+		sleep(1);
 		chooseOption(sd);
 	}
 	else{
@@ -251,9 +264,6 @@ void attemptNormalUserLogin(int sd){
 		//After Successfull Login we Initialise a semphore for each user to restrict critical operations to single user.
 		//Semaphore - Deposit
 		key_t semKey=ftok("Normal_user",currUser.userID); // Generate a key based on the account number hence, different customers will have different semaphores
-		// union semun{
-		//     int val; // Value of the semaphore
-		// } semSet,semSet1;
 		int semctlStatus;
 		semIdentifier=semget(semKey,1,0); // Get the semaphore if it exists
 		if(semIdentifier==-1){
@@ -283,7 +293,12 @@ void attemptJointUserLogin(int sd){
 	printf("\e[1;1H\e[2J");
 	printf("\n\t\t\t\t\t\t******* JOINT-ACCOUNT USER LOGIN *******\n");
 	printf("\nENTER USER ID : ");
-	scanf("%d",&currUser.userID); //Input User Id
+	while(scanf("%d", &currUser.userID)!=1 || getchar()!='\n'){
+        scanf("%*[^\n]%*c");
+        printf("\nEnter an Integer Number : ");
+    }
+	//printf("\n");
+	//scanf("%d",&currUser.userID); //Input User Id
 	currUserID=currUser.userID;
   	char *pass=getpass("ENTER PASSWORD : "); //Input Password
   	memcpy(currUser.password,pass,sizeof(pass));
@@ -304,10 +319,9 @@ void attemptJointUserLogin(int sd){
 	}
 	if(!result){
 		printf("\n\t\t******************** LOGIN FAILED!! Enter Proper Credentials/Check if Account is Active ********************\n\n");
-		char c;
-		while((c = getchar()) != '\n' && c != EOF) //To clear Keyboard Buffer
-			;
-		sleep(3);
+		//char c;
+		//while((c = getchar()) != '\n' && c != EOF); //To clear Keyboard Buffer
+		sleep(1);
 		chooseOption(sd);
 	}
 	else{
@@ -316,9 +330,6 @@ void attemptJointUserLogin(int sd){
 		//Creating Binary semaphore for each Joint account user while logging in to restrict critical operations
 		//Semaphore - Deposit 
 		key_t semKey=ftok("Joint_user",currUser.userID); // Generate a key based on the account number hence, different customers will have different semaphores
-		// union semun{
-		//     int val; // Value of the semaphore
-		// } semSet,semSet1;
 		int semctlStatus;
 		semIdentifier=semget(semKey,1,0); // Get the semaphore if it exists
 		if(semIdentifier==-1){
@@ -348,7 +359,12 @@ void attemptAdminLogin(int sd){
 	printf("\e[1;1H\e[2J");
 	printf("\n\t\t\t\t\t\t******* ADMINISTRATOR ACCOUNT LOGIN *******\n");
 	printf("\nENTER USER ID : ");
-	scanf("%d",&currUser.userID); //Input Admin Userid
+	while(scanf("%d", &currUser.userID)!=1 || getchar()!='\n'){
+        scanf("%*[^\n]%*c");
+        printf("\nEnter an Integer Number : ");
+    }
+	//printf("\n");
+	//scanf("%d",&currUser.userID); //Input Admin Userid
 	currUserID=currUser.userID;
   	char *pass=getpass("ENTER PASSWORD : "); //Input Admin Password
   	memcpy(currUser.password,pass,sizeof(pass));
@@ -370,9 +386,8 @@ void attemptAdminLogin(int sd){
 	}
 	if(!result){
 		printf("\n\t\t\t\t***************** LOGIN FAILED!! Enter Proper Credentials *****************\n\n");
-		char c;
-		while((c = getchar()) != '\n' && c != EOF) //To clear Keyboard Buffer
-			;
+		//char c;
+		//while((c = getchar()) != '\n' && c != EOF); //To clear Keyboard Buffer
 		sleep(3);
 		chooseOption(sd);
 	}
@@ -398,11 +413,20 @@ void deposit(int sd){
     lock_critical_section(&semOp,semIdentifier); 
     printf("\e[1;1H\e[2J");
 	printf("\nENTER AMOUNT TO BE DEPOSITED : Rs. ");
-	scanf("%f",&amt);
+	while(scanf("%f", &amt)!=1 || getchar()!='\n'){
+        scanf("%*[^\n]%*c");
+        printf("\nPlease Enter a Float value : ");
+    }
+	//printf("\n");
+	//scanf("%f",&amt);
 	while(amt<=0){
 		printf("\nPlease Enter a Valid Amount!!\n");
 		printf("ENTER AMOUNT TO BE DEPOSITED : Rs. ");
-		scanf("%f",&amt);
+		while(scanf("%f", &amt)!=1 || getchar()!='\n'){
+        	scanf("%*[^\n]%*c");
+        	printf("\nPlease Enter a Float value : ");
+    	}
+		//printf("\n");
 	}
 	//To the server
 	int writeStatus=write(sd,&select,sizeof(int)); //Sending select info to server which represents deposit operation
@@ -431,9 +455,8 @@ void deposit(int sd){
 
 	}
 	printf("\n\nPress ENTER to go back to Menu...\n");
-	char c;
-	while((c = getchar()) != '\n' && c != EOF) //Clearing keyboard buffer
-		;
+	//char c;
+	//while((c = getchar()) != '\n' && c != EOF); //Clearing keyboard buffer
 	scanf("%c",&c);
 	showMenu(sd);
 	return;
@@ -453,11 +476,20 @@ void withdraw(int sd){
     lock_critical_section(&semOp1, semIdentifier1);
     printf("\e[1;1H\e[2J");
 	printf("\nENTER AMOUNT TO BE WITHDRAWN : Rs. ");
-	scanf("%f",&amt);
+	while(scanf("%f", &amt)!=1 || getchar()!='\n'){
+        scanf("%*[^\n]%*c");
+        printf("\nPlease Enter a Float value : ");
+    }
+	//printf("\n");
+	//scanf("%f",&amt);
 	while(amt<=0){
 		printf("\nPlease Enter a Valid Amount!!\n");
 		printf("\nENTER AMOUNT TO BE WITHDRAWN : Rs. ");
-		scanf("%f",&amt);
+		while(scanf("%f", &amt)!=1 || getchar()!='\n'){
+        	scanf("%*[^\n]%*c");
+        	printf("\nPlease Enter a Float value : ");
+    	}
+		//printf("\n");
 	}
 	//To the Server
 	int writeStatus=write(sd,&select,sizeof(int));//Sending select info to server indicating that withdraw operation to be performed
@@ -485,9 +517,8 @@ void withdraw(int sd){
 		printf("\t\t\tCURRENT ACCOUNT BALANCE : Rs. %d\n",balance);
 	}
 	printf("\n\nPress ENTER to go back to Menu...\n");
-	char c;
-	while((c = getchar()) != '\n' && c != EOF) //Clearing keyboard buffer
-		;
+	//char c;
+	//while((c = getchar()) != '\n' && c != EOF); //Clearing keyboard buffer
 	scanf("%c",&c);
 	showMenu(sd);
 	return;
@@ -514,8 +545,7 @@ void balanceEnquiry(int sd){
 	printf("%0.2f\n\n",amt);
 	printf("\n\nPress ENTER to go back to Menu...\n");
 	char c;
-	while((c = getchar()) != '\n' && c != EOF) //Clearing keyboard buffer
-		;
+	while((c = getchar()) != '\n' && c != EOF); //Clearing keyboard buffer
 	scanf("%c",&c);
 	showMenu(sd);
 	return;
@@ -647,7 +677,20 @@ void addAccount(int sd){
 	printf("\e[1;1H\e[2J");
 	printf("\n\t\t\t\t\t\t ******* ACCOUNT CREATION MODE *******\n");
 	printf("\nENTER TYPE OF ACCOUNT(1: NORMAL-ACCOUNT  2: JOINT-ACCOUNT) : ");
-	scanf("%d",&type);
+	while(scanf("%d", &type)!=1 || getchar()!='\n'){
+        scanf("%*[^\n]%*c");
+        printf("\nPlease Select proper Account Type : ");
+    }
+	//printf("\n");
+	while(type<1 || type>2){
+		//printf("\nPlease Select proper Account Type\n");
+		while(scanf("%d", &type)!=1 || getchar()!='\n'){
+        	scanf("%*[^\n]%*c");
+        	printf("\nPlease Select proper Account Type : ");
+    	}
+		//printf("\n");
+	}
+	//scanf("%d",&type);
 	writeStatus=write(sd,&type,sizeof(int)); //Sending type of the account info to be created
 	if(writeStatus==-1){
 		perror("Error while writing type data to server in addAccount");
@@ -662,10 +705,19 @@ void addAccount(int sd){
     	char *pass=getpass("ENTER PASSWORD (max 10 characters) : ");
     	memcpy(addUser1.password,pass,sizeof(pass));
 		printf("INITIAL DEPOSIT AMOUNT : Rs. ");
-		scanf("%f",&addUser1.balance);
+		while(scanf("%f", &addUser1.balance)!=1 || getchar()!='\n'){
+        	scanf("%*[^\n]%*c");
+        	printf("\nEnter a Float Value : ");
+    	}
+		//printf("\n");
+		//scanf("%f",&addUser1.balance);
 		while(addUser1.balance<0){
 			printf("\nENTER VALID AMOUNT!! (can start from 0) Rs. ");
-			scanf("%f",&addUser1.balance);
+			while(scanf("%f", &addUser1.balance)!=1 || getchar()!='\n'){
+        		scanf("%*[^\n]%*c");
+        		printf("\nEnter a Float Value : ");
+    		}
+			//printf("\n");
 		}
 		writeStatus=write(sd,&addUser1,sizeof(normalUser)); //Sending account details to server which needs to be created
 		if(writeStatus==-1){
@@ -699,10 +751,19 @@ void addAccount(int sd){
     	char *pass=getpass("ENTER PASSWORD (max 10 characters) : ");
     	memcpy(addUser2.password,pass,sizeof(pass));
 		printf("INITIAL DEPOSIT AMOUNT : Rs. ");
-		scanf("%f",&addUser2.balance);
+		while(scanf("%f", &addUser2.balance)!=1 || getchar()!='\n'){
+        	scanf("%*[^\n]%*c");
+        	printf("\nEnter a Float Value : ");
+    	}
+		//printf("\n");
+		//scanf("%f",&addUser2.balance);
 		while(addUser2.balance<0){
 			printf("\nENTER VALID AMOUNT!! (can start from 0) Rs. ");
-			scanf("%f",&addUser2.balance);
+			while(scanf("%f", &addUser2.balance)!=1 || getchar()!='\n'){
+        		scanf("%*[^\n]%*c");
+        		printf("\nEnter a Float Value : ");
+    		}
+			//printf("\n");
 		}
 		writeStatus=write(sd,&addUser2,sizeof(jointUser)); //Sending account details to the  server
 		if(writeStatus==-1){
@@ -748,7 +809,20 @@ void deleteAccount(int sd){
 	}
 
 	printf("\nENTER TYPE OF ACCOUNT(1: NORMAL-ACCOUNT  2: JOINT-ACCOUNT) : ");
-	scanf("%d",&type);
+	//scanf("%d",&type);
+	while(scanf("%d", &type)!=1 || getchar()!='\n'){
+        scanf("%*[^\n]%*c");
+        printf("\nPlease Select proper Account Type : ");
+    }
+	//printf("\n");
+	while(type<1 || type>2){
+		//printf("\nPlease select the proper Account Type\n");
+		while(scanf("%d", &type)!=1 || getchar()!='\n'){
+        	scanf("%*[^\n]%*c");
+        	printf("\nPlease Select proper Account Type : ");
+    	}
+		printf("\n");
+	}
 
 	writeStatus=write(sd,&type,sizeof(int)); //Sending Type of Account Info
 	if(writeStatus==-1){
@@ -757,7 +831,12 @@ void deleteAccount(int sd){
 	}
 
 	printf("ENTER THE ACCOUNT NUMBER TO BE DEACTIVATED : "); //Sending Account Number to be deleted
-	scanf("%d",&accNo);
+	//scanf("%d",&accNo);
+	while(scanf("%d", &accNo)!=1 || getchar()!='\n'){
+        	scanf("%*[^\n]%*c");
+        	printf("\nEnter an Integer Value : ");
+    }
+	//printf("\n");
 	writeStatus=write(sd,&accNo,sizeof(int));
 	if(writeStatus==-1){
 		perror("Error while sending userID to server in deleteAccount");
@@ -801,8 +880,20 @@ void modifyAccount(int sd){
 	}
 
 	printf("\nENTER TYPE OF ACCOUNT(1: NORMAL-ACCOUNT  2: JOINT-ACCOUNT) : "); 
-	scanf("%d",&type); //Reading Type of account
-
+	//scanf("%d",&type); //Reading Type of account
+	while(scanf("%d", &type)!=1 || getchar()!='\n'){
+        scanf("%*[^\n]%*c");
+        printf("\nPlease Select proper Account Type : ");
+    }
+	//printf("\n");
+	while(type<1 || type>2){
+		//printf("\nPlease select the proper Account Type\n");
+		while(scanf("%d", &type)!=1 || getchar()!='\n'){
+        	scanf("%*[^\n]%*c");
+        	printf("\nPlease Select proper Account Type : ");
+    	}
+		//printf("\n");
+	}
 	writeStatus=write(sd,&type,sizeof(int)); //Sending type of account info to server
 	if(writeStatus==-1){
 		perror("Error while sending type data to server in modifyAccount");
@@ -814,15 +905,35 @@ void modifyAccount(int sd){
 		//Inputing new details for the account
 		printf("\n\t\t\t\t\t*** ENTER DETAILS OF NORMAL-ACCOUNT TO BE MODIFIED ***\n");
 		printf("\nUSER ID : ");
-		scanf("%d",&modUser1.userID);
+		//scanf("%d",&modUser1.userID);
+		while(scanf("%d", &modUser1.userID)!=1 || getchar()!='\n'){
+        	scanf("%*[^\n]%*c");
+        	printf("\nEnter an Integer Value : ");
+    	}
 		printf("ACCOUNT NUMBER : ");
-		scanf("%d",&modUser1.account_no);
+		//scanf("%d",&modUser1.account_no);
+		while(scanf("%d", &modUser1.account_no)!=1 || getchar()!='\n'){
+        	scanf("%*[^\n]%*c");
+        	printf("\nEnter an Integer Value : ");
+    	}	
 		printf("NEW NAME OF ACCOUNT HOLDER : ");
 		scanf(" %[^\n]",modUser1.name);
     	char *pass=getpass("ENTER NEW PASSWORD (max 10 characters) : ");
     	memcpy(modUser1.password,pass,sizeof(pass));
 		printf("NEW BALANCE : ");
-		scanf("%f",&modUser1.balance);
+		//scanf("%f",&modUser1.balance);
+		while(scanf("%f", &modUser1.balance)!=1 || getchar()!='\n'){
+        	scanf("%*[^\n]%*c");
+        	printf("\nEnter a Float Value : ");
+    	}
+		while(modUser1.balance<0){
+			printf("Account Balance cannot be less then 0\n");
+			printf("Please Enter proper value\n");
+			while(scanf("%f", &modUser1.balance)!=1 || getchar()!='\n'){
+        		scanf("%*[^\n]%*c");
+        		printf("\nEnter a Float Value : ");
+    		}
+		}
 		writeStatus=write(sd,&modUser1,sizeof(normalUser)); //Sending the modified details to server
 		if(writeStatus==-1){
 			perror("Error while sending user info to server in modifyAccount");
@@ -835,9 +946,17 @@ void modifyAccount(int sd){
 		//Inputing new details for Joint Account
 		printf("\n\t\t\t\t\t *** ENTER DETAILS OF JOINT-ACCOUNT TO BE MODIFIED ***\n");
 		printf("\nUSER ID : ");
-		scanf("%d",&modUser2.userID);
+		//scanf("%d",&modUser2.userID);
+		while(scanf("%d", &modUser2.userID)!=1 || getchar()!='\n'){
+        	scanf("%*[^\n]%*c");
+        	printf("\nEnter a Integer Value : ");
+    	}
 		printf("ACCOUNT NUMBER : ");
-		scanf("%d",&modUser2.account_no);
+		//scanf("%d",&modUser2.account_no);
+		while(scanf("%d", &modUser2.account_no)!=1 || getchar()!='\n'){
+        	scanf("%*[^\n]%*c");
+        	printf("\nEnter a Integer Value : ");
+    	}
 		printf("NEW NAME OF PRIMARY ACCOUNT HOLDER : ");
 		scanf(" %[^\n]",modUser2.name1);
 		printf("NEW NAME OF SECONDARY ACCOUNT HOLDER : ");
@@ -846,7 +965,19 @@ void modifyAccount(int sd){
     	char *pass=getpass("ENTER NEW PASSWORD (max 10 characters) : ");
     	memcpy(modUser2.password,pass,sizeof(pass));
 		printf("NEW BALANCE : ");
-		scanf("%f",&modUser2.balance);
+		//scanf("%f",&modUser2.balance);
+		while(scanf("%f", &modUser2.balance)!=1 || getchar()!='\n'){
+        	scanf("%*[^\n]%*c");
+        	printf("\nEnter a Float Value : ");
+    	}
+		while(modUser2.balance<0){
+			printf("Account Balance cannot be less then 0\n");
+			printf("Please Enter proper value\n");
+			while(scanf("%f", &modUser2.balance)!=1 || getchar()!='\n'){
+        		scanf("%*[^\n]%*c");
+        		printf("\nEnter a Float Value : ");
+    		}
+		}
 		writeStatus=write(sd,&modUser2,sizeof(jointUser)); //Sending the modified details to server
 		if(writeStatus==-1){
 			perror("Error while sending joint user info to server in modifyAccount");
@@ -890,8 +1021,20 @@ void searchAccount(int sd){
 	}
 	printf("\e[1;1H\e[2J");
 	printf("\nENTER TYPE OF ACCOUNT(1: NORMAL-ACCOUNT  2: JOINT-ACCOUNT) : ");
-	scanf("%d",&type);
-
+	//scanf("%d",&type);
+	while(scanf("%d", &type)!=1 || getchar()!='\n'){
+        scanf("%*[^\n]%*c");
+        printf("\nPlease Select proper Account Type : ");
+    }
+	//printf("\n");
+	while(type<1 || type>2){
+		//printf("\nPlease select the proper Account Type\n");
+		while(scanf("%d", &type)!=1 || getchar()!='\n'){
+        	scanf("%*[^\n]%*c");
+        	printf("\nPlease Select proper Account Type : ");
+    	}
+		//printf("\n");
+	}
 	writeStatus=write(sd,&type,sizeof(int)); //Sending the type of account information
 	if(writeStatus==-1){
 		perror("Error while sending type data to server in searchAccount");

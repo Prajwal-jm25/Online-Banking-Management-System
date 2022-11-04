@@ -455,9 +455,9 @@ void deposit(int sd){
 
 	}
 	printf("\n\nPress ENTER to go back to Menu...\n");
-	//char c;
-	//while((c = getchar()) != '\n' && c != EOF); //Clearing keyboard buffer
-	scanf("%c",&c);
+	char c;
+	while((c = getchar()) != '\n' && c != EOF); //Clearing keyboard buffer
+	//scanf("%c",&c);
 	showMenu(sd);
 	return;
 }
@@ -517,9 +517,9 @@ void withdraw(int sd){
 		printf("\t\t\tCURRENT ACCOUNT BALANCE : Rs. %d\n",balance);
 	}
 	printf("\n\nPress ENTER to go back to Menu...\n");
-	//char c;
-	//while((c = getchar()) != '\n' && c != EOF); //Clearing keyboard buffer
-	scanf("%c",&c);
+	char c;
+	while((c = getchar()) != '\n' && c != EOF); //Clearing keyboard buffer
+	//scanf("%c",&c);
 	showMenu(sd);
 	return;
 }
@@ -546,7 +546,7 @@ void balanceEnquiry(int sd){
 	printf("\n\nPress ENTER to go back to Menu...\n");
 	char c;
 	while((c = getchar()) != '\n' && c != EOF); //Clearing keyboard buffer
-	scanf("%c",&c);
+	//scanf("%c",&c);
 	showMenu(sd);
 	return;
 }
@@ -657,7 +657,7 @@ void viewDetails(int sd){
 	printf("\n\nPress ENTER to go Back to Menu\n");
 	char c;
 	while((c = getchar()) != '\n' && c != EOF); //Used to clear keyboard buffer
-	scanf("%c",&c);
+	//scanf("%c",&c);
 	showMenu(sd);
 	return;
 }
@@ -683,7 +683,7 @@ void addAccount(int sd){
     }
 	//printf("\n");
 	while(type<1 || type>2){
-		//printf("\nPlease Select proper Account Type\n");
+		printf("\nPlease Select proper Account Type\n");
 		while(scanf("%d", &type)!=1 || getchar()!='\n'){
         	scanf("%*[^\n]%*c");
         	printf("\nPlease Select proper Account Type : ");
@@ -791,7 +791,7 @@ void addAccount(int sd){
 	printf("\n\nPress ENTER to go Back to Menu\n");
 	char c;
 	while((c = getchar()) != '\n' && c != EOF); //Used to clear keyboard buffer
-	scanf("%c",&c);
+	//scanf("%c",&c);
 	showMenu(sd);
 	return;
 }
@@ -816,7 +816,7 @@ void deleteAccount(int sd){
     }
 	//printf("\n");
 	while(type<1 || type>2){
-		//printf("\nPlease select the proper Account Type\n");
+		printf("\nPlease select the proper Account Type\n");
 		while(scanf("%d", &type)!=1 || getchar()!='\n'){
         	scanf("%*[^\n]%*c");
         	printf("\nPlease Select proper Account Type : ");
@@ -861,7 +861,7 @@ void deleteAccount(int sd){
 	printf("\n\nPress ENTER to go Back to Menu\n");
 	char c;
 	while((c = getchar()) != '\n' && c != EOF); //Used to clear keyboard buffer
-	scanf("%c",&c);
+	//scanf("%c",&c);
 	showMenu(sd);
 	return;
 }
@@ -887,7 +887,7 @@ void modifyAccount(int sd){
     }
 	//printf("\n");
 	while(type<1 || type>2){
-		//printf("\nPlease select the proper Account Type\n");
+		printf("\nPlease select the proper Account Type\n");
 		while(scanf("%d", &type)!=1 || getchar()!='\n'){
         	scanf("%*[^\n]%*c");
         	printf("\nPlease Select proper Account Type : ");
@@ -1002,7 +1002,7 @@ void modifyAccount(int sd){
 	printf("\n\nPress ENTER to go Back to Menu\n");
 	char c;
 	while((c = getchar()) != '\n' && c != EOF); //Used to clear keyboard buffer
-	scanf("%c",&c);
+	//scanf("%c",&c);
 	showMenu(sd);
 	return;
 }
@@ -1028,7 +1028,7 @@ void searchAccount(int sd){
     }
 	//printf("\n");
 	while(type<1 || type>2){
-		//printf("\nPlease select the proper Account Type\n");
+		printf("\nPlease select the proper Account Type\n");
 		while(scanf("%d", &type)!=1 || getchar()!='\n'){
         	scanf("%*[^\n]%*c");
         	printf("\nPlease Select proper Account Type : ");
@@ -1045,7 +1045,11 @@ void searchAccount(int sd){
 		normalUser searchUser1;
 		int userID;
 		printf("\nENTER USER ID OF ACCOUNT TO BE SEARCHED : ");
-		scanf("%d%*c",&userID);
+		//scanf("%d%*c",&userID);
+		while(scanf("%d", &userID)!=1 || getchar()!='\n'){
+        	scanf("%*[^\n]%*c");
+        	printf("\nUSER ID MUST BE NUMBER : ");
+    	}
 		writeStatus=write(sd,&userID,sizeof(userID)); //Sending User Id to be searched
 		if(writeStatus==-1){
 			perror("Error while sending userInfo to server in searchAccount");
@@ -1074,7 +1078,11 @@ void searchAccount(int sd){
 		jointUser searchUser2;
 		int userID1;
 		printf("\nENTER USER ID OF ACCOUNT TO BE SEARCHED : ");
-		scanf("%d%*c",&userID1);
+		//scanf("%d%*c",&userID1);
+		while(scanf("%d", &userID1)!=1 || getchar()!='\n'){
+        	scanf("%*[^\n]%*c");
+        	printf("\nUSER ID MUST BE NUMBER : ");
+    	}
 		writeStatus=write(sd,&userID1,sizeof(userID1)); //Sending User Id to be searched
 		if(writeStatus==-1){
 			perror("Error while sending userInfo to server in searchAccount");

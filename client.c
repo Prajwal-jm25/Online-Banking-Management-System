@@ -32,7 +32,7 @@ int main(){
 		int choice;
 		while(scanf("%d", &choice)!=1 || getchar()!='\n'){
         scanf("%*[^\n]%*c");
-        printf("You must enter an Integer : ");
+        printf("\nPlease Enter proper option : ");
     	}
 		printf("\n");
 		//scanf("%d",&choice);
